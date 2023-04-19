@@ -30,6 +30,12 @@ for(let i = 0; i < boxes.length; i++) {
         //Compute play
         if(player1 == player2) {
             player1++;
+
+            if(secondPlayer == "vsAI") {
+                computePlay();
+                player2++;
+            }
+
         } else {
             player2++
         }
@@ -38,6 +44,27 @@ for(let i = 0; i < boxes.length; i++) {
         checkWinCondiction()
 
     }
+    })
+}
+
+//Event to find out if you are going to play against another player or AI
+for(i = 0; i < buttons.length; i++) {
+
+    buttons[i].addEventListener("click", function() {
+
+        secondPlayer = this.getAttribute("id");
+        
+        for(let j = 0; j < buttons.length; j++) {
+            buttons[j].style.display = "none";
+        }
+
+        setTimeout(function() {
+
+            let container = document.querySelector("#container");
+            container.classList.remove("hide")
+
+        }, 500)
+
     })
 }
 
@@ -245,5 +272,33 @@ function declareWinner(winner) {
     }
 }
 
+//AI logic
+function computePlay() {
+
+    let cloneO = o.cloneNode(true);
+    counter = 0;
+    filled = 0;
+
+    for(let i = 0; i < boxes.length; i++) {
+
+        let randomNumber = Math.floor(Math.random() * 5);
+
+        // Only fill in if the child is empty
+        if(boxes[i].childNodes[0] == undefined) {
+            if(randomNumber <= 1) {
+                boxes[i].appendChild(cloneO);
+                counter++;
+                break;
+            }
+        // Checking how many boxes are filled
+        } else {
+          filled++;
+        }
+    }
+
+    if(counter == 0 && filled < 9) {
+        computePlay()
+    }
+}   
 
 
